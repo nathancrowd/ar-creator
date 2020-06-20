@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="createexperience" method="post" enctype="multipart/form-data">
+        <label for="name">Experience Name</label>
+        <input type="text" id="name" name="experiencename" />
+        <button id='addAsset'>Add Asset</button>
+        <div id='assetContainer'></div>
+        <input type="submit">
+    </form>
+    <script defer>
+
+        let assetIndex = 0;
+
+        function addAssetFields(e) {
+            if (e) {
+                e.preventDefault();
+            }
+            let set = document.createElement('div');
+            set.innerHTML = `
+                <label for="model_${assetIndex}">GLTF Model</label>
+                <input id="model_${assetIndex}" type="file" name="model_${assetIndex}"><br>
+                <label for="patt_${assetIndex}">.patt file</label>
+                <input id="patt_${assetIndex}" type="file" name="patt_${assetIndex}"><br>
+            `;
+            assetContainer.appendChild(set);
+            assetIndex++;
+        }
+
+        addAsset.addEventListener('click', addAssetFields, false);
+
+    </script>
+</body>
+</html>

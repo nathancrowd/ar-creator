@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script> -->
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+</head>
+<body>
+    <script>
+
+        AFRAME.registerComponent('markerhandler', {
+            init: function () {
+              this.el.sceneEl.addEventListener('markerFound', () => {
+                // redirect to custom URL
+                window.location = 'https://github.com/AR-js-org/AR.js';
+              });
+          }
+        });
+    </script>
+    <a-scene embedded arjs='trackingMethod: best; debugUIEnabled:false'>
+        <a-assets>
+            {% for asset in modelData.assets %}
+                <a-asset-item id="animated-asset-{{ loop.index }}" src="{{ reqUrl }}/{{ asset.model }}"></a-asset-item>
+            {% endfor %}
+        </a-assets>
+        {% for asset in modelData.assets %}
+            <a-marker type="pattern" preset="custom" url="{{ reqUrl }}/{{ asset.patt }}" emitevents='true' patternRatio="0.5">
+                <!-- <a-marker type="pattern" preset="custom" url="https://raw.githubusercontent.com/vettorazi/aframe-gltf-models/master/markerv6.patt" emitevents='true' patternRatio="0.5"> -->
+                <a-entity
+                    position="0 0 0"
+                    gltf-model="#animated-asset-{{ loop.index }}"
+                    scale="0.001 0.001 0.001">
+                </a-entity>
+            </a-marker>
+        {% endfor %}
+
+        <!-- use this <a-entity camera> to support multiple-markers, otherwise use <a-marker-camera> instead of </a-marker> -->
+        <a-entity camera></a-entity>
+    </a-scene>
+    
+</body>
+</html>
