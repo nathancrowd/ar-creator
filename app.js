@@ -2,6 +2,7 @@ const express = require('express');
 const formidable = require('formidable');
 const fs = require('fs');
 const swig = require('swig');
+const mv = require('mv');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -55,7 +56,7 @@ function createExperience(fields, files) {
             if(!fs.existsSync(experiencePath)) {
                 fs.mkdirSync(experiencePath);
             }
-            fs.rename(filePathOld, filePathNew, function (err) {
+            mv(filePathOld, filePathNew, function (err) {
                 if (err) throw err;
             });
             if (!assets[fileIndex]) {
