@@ -2,11 +2,7 @@ const express = require('express');
 const formidable = require('formidable');
 const fs = require('fs');
 const swig = require('swig');
-const https = require('https')
-const privateKey = fs.readFileSync(`${__dirname}/arlearning.key`);
-const certificate = fs.readFileSync(`${__dirname}/arlearning.crt`);
 
-const credentials = {key: privateKey, cert: certificate};
 const app = express();
 const port = process.env.PORT | 8080;
 const httpsPort = process.env.PORT | 8443;
@@ -119,11 +115,4 @@ app.get('/experiences/:path/:asset', (req,res) => {
     res.sendFile(path);
 })
 
-app.listen(port, () => console.log(`Server listening at http://localhost:${port}`))
-https.createServer({
-    key: credentials.key,
-    cert: credentials.cert
-}, app)
-.listen(httpsPort, function () {
-    console.log('https running')
-})
+app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));
