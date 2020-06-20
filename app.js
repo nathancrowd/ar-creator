@@ -4,8 +4,7 @@ const fs = require('fs');
 const swig = require('swig');
 
 const app = express();
-const port = process.env.PORT | 8080;
-const httpsPort = process.env.PORT | 8443;
+const port = process.env.PORT || 8080;
 
 app.get('/', (req,res) => {
     let template = swig.compileFile(`${__dirname}/templates/form.html`);
