@@ -49,6 +49,9 @@ function createExperience(fields, files) {
             let fileIndex = getFileIndex(name[0]);
             let filePathOld = files[name[0]].path;
             let filePathNew = `${experiencePath}/${files[name[0]].name}`;
+            if(!fs.existsSync(`${__dirname}/experiences`)) {
+                fs.mkdirSync(`${__dirname}/experiences`);
+            }
             if(!fs.existsSync(experiencePath)) {
                 fs.mkdirSync(experiencePath);
             }
