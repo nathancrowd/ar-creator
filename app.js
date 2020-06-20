@@ -108,7 +108,7 @@ function getExperienceTemplate(path, url) {
 }
 app.get('/experiences/:path', (req,res) => {
     let path = `${__dirname}/experiences/${req.params.path}/index.js`;
-    let url = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let url = 'https://' + req.get('host') + req.originalUrl;
     let template = getExperienceTemplate(path, url);
     res.send(template);
 })
