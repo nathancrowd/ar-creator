@@ -7,7 +7,7 @@ const mv = require('mv');
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.get('/', (req,res) => {
+app.get('/app', (req,res) => {
     let template = swig.compileFile(`${__dirname}/templates/form.html`);
     let output = template();
     res.send(output);
@@ -77,11 +77,11 @@ function createExperience(fields, files) {
             if (err) {
                 rej(err);
             }
-            res();
+            res(experiencePath);
         });
     })
 }
-app.post('/createexperience', (req,res) => {
+app.post('/api/createexperience', (req,res) => {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
         createExperience(fields, files).then(() => {
@@ -106,16 +106,39 @@ function getExperienceTemplate(path, url) {
     });
     return output;
 }
-app.get('/experiences/:path', (req,res) => {
+app.get('/app/experiences/:path', (req,res) => {
     let path = `${__dirname}/experiences/${req.params.path}/index.js`;
     let url = 'https://' + req.get('host') + req.originalUrl;
     let template = getExperienceTemplate(path, url);
     res.send(template);
+});
+
+app.get('/api/experiences/:path', (req,res) => {
+    let path = `${__dirname}/experiences/${req.params.path}/index.js`;
+    const modelData = require(path);
+    res.send(modelData);
+});
+
+/**
+ * 
+ * @param {*} req Server request object
+ * @param {*} res Server response object
+ */
+function returnAsset(req,res) {
+    const path = `${__dirname}/experiences/${req.params.path}/${req.params.asset}`;
+    res.sendFile(path);
+}
+
+app.get('/app/experiences/:path/:asset', (req,res) => {
+    returnAsset(req,res);
 })
 
 app.get('/experiences/:path/:asset', (req,res) => {
-    const path = `${__dirname}/experiences/${req.params.path}/${req.params.asset}`;
-    res.sendFile(path);
+    returnAsset(req,res);
+})
+
+app.get('/api/experiences/:path/:asset', (req,res) => {
+    returnAsset(req,res);
 })
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));
